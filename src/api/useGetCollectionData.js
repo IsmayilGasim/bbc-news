@@ -1,0 +1,20 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { collectionURL } from "./firebase"; // Import your Firestore instance
+
+export default function useGetCollectionData(collectionName) {
+  const [result, setResult] = useState(null);
+    
+  useEffect(() => {
+    if (!collectionName) return;
+    axios
+      .get(collectionURL.replace("collection_name", collectionName))
+      .then((data) => {
+        console.log("data.data", data.data.documents[0].fields);
+        setResult(data.data.documents[0].fields);
+      });
+    console.log("get result", result);
+  }, [collectionName]);
+
+  return { data: result };
+}

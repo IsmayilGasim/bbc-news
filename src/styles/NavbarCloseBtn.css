@@ -1,0 +1,5 @@
+.offcanvas-header .btn-close {
+    order: -1;           /* Moves the close button before other elements */
+    margin-right: auto;   /* Pushes it to the far left */
+    margin-left: 0;       /* Removes any left margin */
+  }
