@@ -1,4 +1,4 @@
-import { useState, useEffect, forwardRef } from "react";
+import { useRef } from "react";
 
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -9,13 +9,19 @@ import SearchForm from "./SearchForm";
 import "../../styles/NavbarCloseBtn.css";
 import { NavDropdown } from "react-bootstrap";
 
-const SideNavBar = forwardRef( (
-  { articleTopics, showNavBar, closeBtnClickHandler, openSideNavBarHandler },
+const SideNavBar = ({
+  articleTopics,
+  showNavBar,
+  closeBtnClickHandler,
+  openSideNavBarHandler,
   searchRef
-) =>{
-  console.log("forwardRef searchRef",searchRef)
+}) => {
+  // const searchRef = useRef(null);
+  console.log("forwardRef searchRef", searchRef);
   return (
     <>
+      
+
       <Navbar expand="false">
         <Container fluid>
           <Navbar.Toggle
@@ -27,8 +33,9 @@ const SideNavBar = forwardRef( (
             <Offcanvas.Header
               closeButton
               onClick={closeBtnClickHandler}
+              
             ></Offcanvas.Header>
-            <SearchForm ref={searchRef} />
+            <SearchForm searchRef={searchRef} />
 
             <Nav className="flex-column bg-light p-3">
               {articleTopics.length > 0 ? (
@@ -41,12 +48,14 @@ const SideNavBar = forwardRef( (
                 <span>No topics found.</span>
               )}
             </Nav>
+           
+            
           </Navbar.Offcanvas>
         </Container>
       </Navbar>
       {/* })} */}
     </>
   );
-});
+};
 
 export default SideNavBar;

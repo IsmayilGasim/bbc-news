@@ -1,7 +1,9 @@
 import { Container, Row, Col } from "react-bootstrap";
 import ArticleCard from "../cards/ArticleCard";
+import getNewsData from "../../api/getNewsData";
 
 function MainArticles() {
+  // console.log("getNewsData",getNewsData());
   return (
     <Container fluid>
       <Row >

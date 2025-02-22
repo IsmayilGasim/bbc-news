@@ -1,13 +1,13 @@
 import { initializeApp } from 'firebase/app';
 
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection } from 'firebase/firestore';
 
 
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyCLxDFM3rg_fkqSsBpRVVX6BTQtrgufrxc",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "bbc-news-8f513.firebaseapp.com",
   projectId: "bbc-news-8f513",
   storageBucket: "bbc-news-8f513.firebasestorage.app",

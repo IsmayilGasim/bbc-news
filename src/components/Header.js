@@ -25,13 +25,14 @@ function Header({ articleTopics }) {
               />
             </Col>
             <Col lg={9}>
-              <i
+            <i
                 className="bi bi-search"
                 style={{ fontSize: "23px", color: "black", margin: "0px" }}
                 onClick={() => {
+                  searchRef.current?.focus();
+
                   setShowNavBar(true);
                   console.log("searchRef.current",searchRef.current)
-                  searchRef.current?.focus();
                   return true;
                 }}
               ></i>
