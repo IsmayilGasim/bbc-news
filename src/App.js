@@ -1,25 +1,26 @@
-import { useState, useEffect } from "react";
+import { BrowserRouter, Route, Router, Routes } from "react-router-dom";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import "./App.css";
-import Header from "./components/Header";
-import TopNavBar from "./components/menu/TopNavBar";
-import MainArticles from "./components/main-content/MainArticles";
-import SideNavBar from "./components/menu/SideNavBar";
-import useGetCollectionData from "../src/api/useGetCollectionData.js";
+import Register from "../src/pages/Register.js";
+import NoPage from "./pages/NoPage.js";
+import Layout from "./components/Layout.js";
 
 function App() {
-  const { data: articleTopicsList } = useGetCollectionData("article-topics");
-  const topics = articleTopicsList ? Object.keys(articleTopicsList) : [];
-
   return (
-    <>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/">
+          <Route index element={<Layout />} />
 
-      <Header articleTopics={topics}/>
-      <TopNavBar articleTopics={topics}/>
-      <MainArticles />
-    </>
+          <Route path="register" element={<Register />} />
+        </Route>
+        {/* <Route path="/register" element={<Register />} />
+        <Route path="*" element={<NoPage />} /> */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 

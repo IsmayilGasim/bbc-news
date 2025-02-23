@@ -1,19 +1,25 @@
 import axios from "axios";
+import { useEffect, useState } from "react";
 
-function getNewsData(category) {
-    category = "business";
-    console.log("process",process.env.REACT_APP_NEWSDATA_API_KEY)
-    const apiKey = process.env.REACT_APP_NEWSDATA_API_KEY;
-   axios
-    .get(
-      `https://newsdata.io/api/1/news?apikey=${apiKey}&category=${category}`
-    )
-    .then((data) => {
-        return console.log("data:",data.data.results);
+function useGetNewsData(category) {
+  const [news, setNews] = useState(null);
+  console.log("category", category);
+
+  let url;
+  if (category) {
+    url = `https://newsdata.io/api/1/news?apikey=${process.env.REACT_APP_NEWSDATA_API_KEY}&category=${category}`;
+  } else {
+    url = `https://newsdata.io/api/1/news?apikey=${process.env.REACT_APP_NEWSDATA_API_KEY}`;
+  }
+  useEffect(() => {
+    axios.get(url).then((data) => {
+      setNews(data.data.results);
+      console.log("request count");
     });
-    axios.get("https://www.bbc.com/live").then((data)=>{
-        console.log("bbc data", data)
-    })
+  }, [category]);
+
+  console.log("news data:", news);
+  return news;
 }
 
-export default getNewsData;
+export default useGetNewsData;

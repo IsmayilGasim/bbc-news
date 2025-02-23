@@ -14,14 +14,10 @@ const SideNavBar = ({
   showNavBar,
   closeBtnClickHandler,
   openSideNavBarHandler,
-  searchRef
+  searchRef,
 }) => {
-  // const searchRef = useRef(null);
-  console.log("forwardRef searchRef", searchRef);
   return (
     <>
-      
-
       <Navbar expand="false">
         <Container fluid>
           <Navbar.Toggle
@@ -33,7 +29,6 @@ const SideNavBar = ({
             <Offcanvas.Header
               closeButton
               onClick={closeBtnClickHandler}
-              
             ></Offcanvas.Header>
             <SearchForm searchRef={searchRef} />
 
@@ -48,8 +43,6 @@ const SideNavBar = ({
                 <span>No topics found.</span>
               )}
             </Nav>
-           
-            
           </Navbar.Offcanvas>
         </Container>
       </Navbar>

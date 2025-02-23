@@ -1,7 +1,10 @@
+import { Button } from "react-bootstrap"
 
 function SignIn() {
   return (
-    <button>SignIn</button>
+    <Button variant="light" size='sm' className="m-1">
+      Sign in
+    </Button>
   )
 }
 

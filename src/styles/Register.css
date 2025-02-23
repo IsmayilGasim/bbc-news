@@ -1,0 +1,98 @@
+.registration {
+    background-image: url('https://ichef.bbci.co.uk/images/ic/704xn/p0gpmw0t.png');
+    background-color: black;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size: calc(40%) auto;
+    left: 0;
+    right: 0;
+    position: fixed;
+
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+.registrationDetails {
+    left: 12.5%;
+    width: 35%;
+    position: relative;
+    margin-top: 5%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+img {
+    height: 10rem;
+    /* width:5rem; */
+}
+
+p {
+    margin-top: 30px;
+}
+
+
+/*** For input email ***/
+.user-input-wrp {
+    position: relative;
+    width: 100%;
+    font-size: 25px;
+
+}
+
+.user-input-wrp .inputText {
+    width: 100%;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid white;
+    box-shadow: none !important;
+    background-color: black;
+    border-width: medium medium 2px;
+    color: white;
+}
+
+.user-input-wrp .inputText:focus {
+    border-color: white;
+    border-width: medium medium 5px;
+}
+
+.user-input-wrp .floating-label {
+    position: absolute;
+    pointer-events: none;
+    top: 35px;
+    left:0;
+    transition: 0.4s ease all;
+    color: rgba(255, 255, 255, 0.548);
+}
+
+.user-input-wrp input:focus~.floating-label,
+.user-input-wrp input:not(:focus):valid~.floating-label {
+    top: 0px;
+    font-size: 23px;
+    opacity: 1;
+    color: white;
+}
+.continueBtn{
+    width: 100%;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    background-color: #0071f1;
+    color: white;
+    cursor: pointer;
+    padding: 1rem;
+    font-weight: bold;
+    transition: all .2sease 0s;
+box-shadow: none;
+border: none;
+}
+.continueBtn:hover{
+    
+    background-color: #0051ad;
+    box-shadow: 0 0 0 .125rem #0051ad;
+    outline: none;
+}
