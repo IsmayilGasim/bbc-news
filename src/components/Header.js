@@ -44,14 +44,13 @@ function Header({ articleTopics }) {
           <Image src={logo} style={{ width: "80px", height: "40px" }}></Image>
         </Col>
         <Col className="d-flex justify-content-end p-0 m-0">
-        <Link to='register'>
-        <RegisterButton />
-
-        </Link>
+          <Link to="register">
+            <RegisterButton />
+          </Link>
           <SignIn />
         </Col>
       </Row>
-      <Outlet/>
+      <Outlet />
     </Container>
   );
 }

@@ -16,6 +16,7 @@ function App() {
           <Route index element={<Layout />} />
 
           <Route path="register" element={<Register />} />
+          <Route path="*" element={<NoPage />} />
         </Route>
         {/* <Route path="/register" element={<Register />} />
         <Route path="*" element={<NoPage />} /> */}
