@@ -9,14 +9,19 @@ import { FaTimes } from "react-icons/fa";
 function Register() {
   const navigate = useNavigate();
   const pageLocation = useLocation();
-  console.log("pageLocation:",pageLocation)
+  console.log("pageLocation:", pageLocation);
 
-  const [inputEmail, setInputEmail] = useState('');
+  const [inputEmail, setInputEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [showPasswordPage, setShowPasswordPage] = useState(false);
 
-  const [inputPassword, setInputPassword] = useState('');
+  const [inputPassword, setInputPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+  const [passwordValidate, setPasswordValidate] = useState({
+    letter: false,
+    eightCharacter: false,
+    symbolOrNumber: false,
+  });
 
   console.log("inputEmail:", inputEmail, " inputPassword:", inputPassword);
 
@@ -40,13 +45,60 @@ function Register() {
     }
   };
 
-  useEffect(()=>{
-    if(showPasswordPage){
-      // navigate(`${pageLocation.pathname}/password`);
+  useEffect(() => {
+    if (showPasswordPage) {
+      // navigate(`${pageLocation.pathname}/password`, { replace: true });
       // pageLocation.pathname = '/test'
     }
+  }, [showPasswordPage]);
 
-  },[showPasswordPage]);
+  const checkingPassword = () => {
+    if (inputPassword.match(/[A-Za-z]/)) {
+      console.log("uppercase matched");
+      setPasswordValidate((prev) => ({
+        ...prev,
+        letter: true,
+      }));
+    } else {
+      setPasswordValidate((prev) => ({
+        ...prev,
+        letter: false,
+      }));
+    }
+
+    if (
+      inputPassword.match(/[0-9]/) ||
+      inputPassword.match(/^(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/)
+    ) {
+      console.log("number or symbol matched");
+      setPasswordValidate((prev) => ({
+        ...prev,
+        symbolOrNumber: true,
+      }));
+    } else {
+      setPasswordValidate((prev) => ({
+        ...prev,
+        symbolOrNumber: false,
+      }));
+    }
+
+    if (inputPassword.length >= 8) {
+      console.log("length matched");
+      setPasswordValidate((prev) => ({
+        ...prev,
+        eightCharacter: true,
+      }));
+    } else {
+      setPasswordValidate((prev) => ({
+        ...prev,
+        eightCharacter: false,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    checkingPassword();
+  }, [inputPassword]);
 
   return (
     <div className="registration scroll-container">
@@ -70,10 +122,28 @@ function Register() {
         {showPasswordPage && (
           <div>
             Passwords need to include...
-            <ul>
-              <li>At least eight characters</li>
-              <li>At least one letter</li>
-              <li>At least one number or symbol</li>
+            <ul style={{ listStyleType: "none" , paddingLeft:'0'}}>
+              <li
+                style={{
+                  color: passwordValidate.eightCharacter ? "green" : "red", // Correct!
+                }}
+              >
+                {passwordValidate.eightCharacter ? "✓" : "•"} At least eight
+                characters
+              </li>
+              <li 
+              style={{ color: passwordValidate.letter ? "green" : "red" }}
+              >
+                {passwordValidate.letter ? "✓" : "•"} At least one letter
+              </li>
+              <li
+                style={{
+                  color: passwordValidate.symbolOrNumber ? "green" : "red",
+                }}
+              >
+                {passwordValidate.symbolOrNumber ? "✓" : "•"} At least one number
+                or symbol
+              </li>
             </ul>
           </div>
         )}
@@ -82,6 +152,8 @@ function Register() {
           {showPasswordPage ? (
             <input
               type="password"
+              autoComplete="new-password"
+              name="new-password"
               required
               className={
                 inputPassword
@@ -113,7 +185,7 @@ function Register() {
               }}
             />
           )}
-          {((inputEmail && !emailError) ||
+          {((inputEmail && !emailError && !showPasswordPage) ||
             (inputPassword && !passwordError)) && (
             <MdDone
               color="green"
