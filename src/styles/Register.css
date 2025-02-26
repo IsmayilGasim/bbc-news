@@ -33,71 +33,6 @@
     margin-bottom: 10px;
 }
 
-
-img {
-    height: 10rem;
-    left: 25%;
-    position: relative;
-    margin-top: 5%;
-}
-
-p {
-    margin-top: 30px;
-}
-
-ul{
-    padding-left: 0 !important;
-}
-
-/*** For input email ***/
-.user-input-wrp {
-    position: relative;
-    width: 100%;
-    font-size: 25px;
-}
-
-.user-input-wrp .inputText,
-.user-input-wrp .inputPassword {
-    width: 100%;
-    outline: none;
-    border: none;
-    border-bottom: 1px solid white;
-    box-shadow: none !important;
-    background-color: black;
-    border-width: medium medium 2px;
-    color: white;
-}
-
-.user-input-wrp .inputText:focus,
-.user-input-wrp .inputPassword:focus {
-    border-color: white;
-    border-width: medium medium 5px;
-}
-
-.user-input-wrp .floating-label {
-    position: absolute;
-    pointer-events: none;
-    top: 35px;
-    left: 0;
-    transition: 0.4s ease all;
-    color: rgba(255, 255, 255, 0.548);
-}
-
-.user-input-wrp .success,
-.user-input-wrp .success:focus {
-    border-color: rgba(47, 255, 50, 0.481);
-}
-
-.user-input-wrp input:focus~.floating-label,
-.user-input-wrp input:not(:focus):valid~.floating-label,
-.user-input-wrp input.filled~.floating-label {
-    top: 0px;
-    font-size: 23px;
-    opacity: 1;
-    color: white;
-}
-
-
 .continueBtn {
     width: 100%;
     font-size: 1.125rem;
@@ -130,13 +65,12 @@ ul{
 .email-error {
     position: absolute;
     left: 0;
-    top: 100px;
+    /* top: 100px; */
     font-size: 15px;
     color: red;
 }
 
 .registration .close-button {
-    display: flex;
     align-items: center;
     justify-content: center;
     padding: 5px;
@@ -144,4 +78,22 @@ ul{
     position: absolute;
     border: 0;
     margin: 20px;
+}
+
+.registration .back-button{
+    background: transparent;
+    border: 0;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    margin: 20px; 
+}
+
+.show-password-button{
+    background: transparent;
+    color: white;
+    border: 0;
+    right: 0;
+    position: absolute;
+    padding: 0;
 }

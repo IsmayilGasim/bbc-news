@@ -1,10 +1,14 @@
+import { useEffect, useState } from "react";
+
 import { MdDone } from "react-icons/md";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { IoChevronBack } from "react-icons/io5";
+import { FaTimes } from "react-icons/fa";
+import { Button } from "react-bootstrap";
 
 import "../styles/Register.css";
 import bbc_white_logo from "../images/bbc_white_logo.png";
-import { useEffect, useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import CustomInput from "../components/login/CustomInput";
 
 function Register() {
   const navigate = useNavigate();
@@ -22,6 +26,7 @@ function Register() {
     eightCharacter: false,
     symbolOrNumber: false,
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   console.log("inputEmail:", inputEmail, " inputPassword:", inputPassword);
 
@@ -94,6 +99,20 @@ function Register() {
         eightCharacter: false,
       }));
     }
+    checkPasswordIsValid();
+  };
+
+  const checkPasswordIsValid = () => {
+    if(passwordValidate.eightCharacter &&
+      passwordValidate.letter &&
+      passwordValidate.symbolOrNumber){
+        console.log('valid password')
+        setPasswordError(false);
+
+        return true;
+      }
+      setPasswordError(true);
+      return false;
   };
 
   useEffect(() => {
@@ -102,6 +121,16 @@ function Register() {
 
   return (
     <div className="registration scroll-container">
+      {showPasswordPage && (
+        <button
+          className="back-button"
+          onClick={() => {
+            setShowPasswordPage(false);
+          }}
+        >
+          <IoChevronBack /> Back
+        </button>
+      )}
       <Link to="/">
         <button className="close-button">
           <FaTimes size={25} />
@@ -122,81 +151,56 @@ function Register() {
         {showPasswordPage && (
           <div>
             Passwords need to include...
-            <ul style={{ listStyleType: "none" , paddingLeft:'0'}}>
+            <ul style={{ listStyleType: "none", paddingLeft: "0" }}>
               <li
                 style={{
-                  color: passwordValidate.eightCharacter ? "green" : "red", // Correct!
+                  color: passwordValidate.eightCharacter ? "#1ecc00" : "white", // Correct!
                 }}
               >
                 {passwordValidate.eightCharacter ? "✓" : "•"} At least eight
                 characters
               </li>
-              <li 
-              style={{ color: passwordValidate.letter ? "green" : "red" }}
+              <li
+                style={{ color: passwordValidate.letter ? "#1ecc00" : "white" }}
               >
                 {passwordValidate.letter ? "✓" : "•"} At least one letter
               </li>
               <li
                 style={{
-                  color: passwordValidate.symbolOrNumber ? "green" : "red",
+                  color: passwordValidate.symbolOrNumber ? "#1ecc00" : "white",
                 }}
               >
-                {passwordValidate.symbolOrNumber ? "✓" : "•"} At least one number
-                or symbol
+                {passwordValidate.symbolOrNumber ? "✓" : "•"} At least one
+                number or symbol
               </li>
             </ul>
           </div>
         )}
-        <div className="user-input-wrp">
+        <div>
           <br />
           {showPasswordPage ? (
-            <input
-              type="password"
-              autoComplete="new-password"
-              name="new-password"
-              required
-              className={
-                inputPassword
-                  ? !passwordError
-                    ? "filled inputPassword success"
-                    : "filled inputPassword"
-                  : "inputPassword"
-              }
-              value={inputPassword}
-              onChange={(e) => {
+            <CustomInput
+              isSuccess={inputPassword && !passwordError}
+              inputType={showPassword ? "text" : "password"}
+              inputValue={inputPassword}
+              inputPlacholder="Password"
+              onChangeInputHandler={(e) => {
                 setInputPassword(e.target.value);
               }}
             />
           ) : (
-            <input
-              type="email"
-              className={
-                inputEmail
-                  ? !emailError
-                    ? "filled inputText success"
-                    : "filled inputText"
-                  : "inputText"
-              }
-              required
-              value={inputEmail}
-              onChange={(e) => {
+            <CustomInput
+              isSuccess={inputEmail && !emailError}
+              inputType="email"
+              inputValue={inputEmail}
+              inputPlacholder="Email"
+              onChangeInputHandler={(e) => {
                 setInputEmail(e.target.value);
                 checkingEmail();
               }}
             />
           )}
-          {((inputEmail && !emailError && !showPasswordPage) ||
-            (inputPassword && !passwordError)) && (
-            <MdDone
-              color="green"
-              size={30}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-green-500"
-            />
-          )}
 
-          <span className="floating-label">
-            {showPasswordPage ? "Password" : "Email"}
-          </span>
           {emailError && (
             <span className="email-error">
               Sorry, that email doesn’t look right. Please check it's a proper
@@ -204,6 +208,20 @@ function Register() {
             </span>
           )}
         </div>
+        {showPasswordPage && (
+          <div>
+            {" "}
+            <button
+              className="show-password-button"
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
+              type="button"
+            >
+              {showPassword ? "Hide password" : "Show password"}
+            </button>
+          </div>
+        )}
         <br />
         <br />
         <br />

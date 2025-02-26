@@ -10,6 +10,7 @@ import Layout from "./components/Layout.js";
 
 function App() {
   return (
+    
     <BrowserRouter>
       <Routes>
         <Route path="/">
@@ -22,6 +23,10 @@ function App() {
         <Route path="*" element={<NoPage />} /> */}
       </Routes>
     </BrowserRouter>
+  //   <><h1>test</h1>
+  //   <CustomInput  isSuccess='true'
+  // inputType='email'
+  // inputPlacholder='Email'/><h1>test2</h1></>
   );
 }
 

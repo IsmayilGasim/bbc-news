@@ -1,4 +1,3 @@
-import React from "react";
 import { Card } from "react-bootstrap";
 
 function ArticleCard({img, title, text, category,publishingDate}) {
