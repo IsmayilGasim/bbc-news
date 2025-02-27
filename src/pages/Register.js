@@ -28,19 +28,20 @@ function Register() {
   });
   const [showPassword, setShowPassword] = useState(false);
 
-  console.log("inputEmail:", inputEmail, " inputPassword:", inputPassword);
 
   const emailValidate = (email) => {
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     return regex.test(email);
   };
-  const checkingEmail = () => {
-    if (!emailValidate(inputEmail)) {
+  const checkingEmail = (email) => {
+    console.log('checkingEmail email:', email);
+    if (!emailValidate(email)) {
       setEmailError(true);
     } else {
       setEmailError(false);
     }
   };
+
   const submitHandler = (e) => {
     e.preventDefault();
     checkingEmail();
@@ -50,59 +51,17 @@ function Register() {
     }
   };
 
+  
+
   useEffect(() => {
     if (showPasswordPage) {
-      // navigate(`${pageLocation.pathname}/password`, { replace: true });
-      // pageLocation.pathname = '/test'
+      setEmailError(false);
     }
   }, [showPasswordPage]);
 
-  const checkingPassword = () => {
-    if (inputPassword.match(/[A-Za-z]/)) {
-      console.log("uppercase matched");
-      setPasswordValidate((prev) => ({
-        ...prev,
-        letter: true,
-      }));
-    } else {
-      setPasswordValidate((prev) => ({
-        ...prev,
-        letter: false,
-      }));
-    }
-
-    if (
-      inputPassword.match(/[0-9]/) ||
-      inputPassword.match(/^(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/)
-    ) {
-      console.log("number or symbol matched");
-      setPasswordValidate((prev) => ({
-        ...prev,
-        symbolOrNumber: true,
-      }));
-    } else {
-      setPasswordValidate((prev) => ({
-        ...prev,
-        symbolOrNumber: false,
-      }));
-    }
-
-    if (inputPassword.length >= 8) {
-      console.log("length matched");
-      setPasswordValidate((prev) => ({
-        ...prev,
-        eightCharacter: true,
-      }));
-    } else {
-      setPasswordValidate((prev) => ({
-        ...prev,
-        eightCharacter: false,
-      }));
-    }
-    checkPasswordIsValid();
-  };
-
   const checkPasswordIsValid = () => {
+    console.log('emailError:',emailError)
+    console.log('checkPasswordIsValid')
     if(passwordValidate.eightCharacter &&
       passwordValidate.letter &&
       passwordValidate.symbolOrNumber){
@@ -115,9 +74,65 @@ function Register() {
       return false;
   };
 
-  useEffect(() => {
-    checkingPassword();
-  }, [inputPassword]);
+  const checkingPassword = (password) => {
+    console.log('checkingPassword');
+    console.log('inputPassword:',password)
+    if (password.match(/[A-Za-z]/)) {
+      console.log("uppercase matched");
+      setPasswordValidate((prev) => ({
+        ...prev,
+        letter: true,
+      }));
+    } else {
+      console.log('upparcase not matched')
+      setPasswordValidate((prev) => ({
+        ...prev,
+        letter: false,
+      }));
+    }
+
+    if (
+      password.match(/[0-9]/) ||
+      password.match(/^(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/)
+    ) {
+      console.log("number or symbol matched");
+      setPasswordValidate((prev) => ({
+        ...prev,
+        symbolOrNumber: true,
+      }));
+    } else {
+      console.log('number not matched')
+
+      setPasswordValidate((prev) => ({
+        ...prev,
+        symbolOrNumber: false,
+      }));
+    }
+
+    if (password.length >= 8) {
+      console.log("length matched");
+      setPasswordValidate((prev) => ({
+        ...prev,
+        eightCharacter: true,
+      }));
+    } else {
+      console.log('length not matched')
+
+      setPasswordValidate((prev) => ({
+        ...prev,
+        eightCharacter: false,
+      }));
+    }
+    checkPasswordIsValid();
+  };
+
+  useEffect(()=>{
+    checkingPassword(inputPassword);
+  },[inputPassword])
+
+const backClickHandler = () =>{
+  checkingEmail();
+}
 
   return (
     <div className="registration scroll-container">
@@ -132,12 +147,12 @@ function Register() {
         </button>
       )}
       <Link to="/">
-        <button className="close-button">
+        <button className="close-button" onClick={backClickHandler}>
           <FaTimes size={25} />
         </button>
       </Link>
       {/* <Outlet /> */}
-      <img src={bbc_white_logo} />
+      <img src={bbc_white_logo} className="logo"/>
 
       <form className="registrationDetails">
         <h2>
@@ -185,7 +200,11 @@ function Register() {
               inputValue={inputPassword}
               inputPlacholder="Password"
               onChangeInputHandler={(e) => {
+                console.log('password onChangeInputHandler');
                 setInputPassword(e.target.value);
+                console.log('input password:', inputPassword)
+
+                // checkingPassword(e.target.value);
               }}
             />
           ) : (
@@ -196,12 +215,13 @@ function Register() {
               inputPlacholder="Email"
               onChangeInputHandler={(e) => {
                 setInputEmail(e.target.value);
-                checkingEmail();
+                console.log('input email:', inputEmail)
+                // checkingEmail(e.target.value);
               }}
             />
           )}
 
-          {emailError && (
+          {emailError && !showPasswordPage && (
             <span className="email-error">
               Sorry, that email doesn’t look right. Please check it's a proper
               email.

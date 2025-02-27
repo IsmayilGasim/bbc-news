@@ -95,5 +95,22 @@
     border: 0;
     right: 0;
     position: absolute;
+
     padding: 0;
+}
+
+
+.registration .logo {
+    height: 10rem;
+    left: 25%;
+    position: relative;
+    margin-top: 5%;
+}
+
+.registration p {
+    margin-top: 30px;
+}
+
+.registration ul{
+    padding-left: 0 !important;
 }
