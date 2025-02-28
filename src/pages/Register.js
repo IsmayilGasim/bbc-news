@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 
-import { MdDone } from "react-icons/md";
-import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { IoChevronBack } from "react-icons/io5";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { IoChevronBack, IoMailOpen } from "react-icons/io5";
 import { FaTimes } from "react-icons/fa";
-import { Button } from "react-bootstrap";
 
 import "../styles/Register.css";
 import bbc_white_logo from "../images/bbc_white_logo.png";
 import CustomInput from "../components/login/CustomInput";
+import { createFirebaseUser, loginFirebaseUser } from "../api/userAuthActions";
 
 function Register() {
-  const navigate = useNavigate();
   const pageLocation = useLocation();
   console.log("pageLocation:", pageLocation);
 
@@ -21,37 +19,97 @@ function Register() {
 
   const [inputPassword, setInputPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
-  const [passwordValidate, setPasswordValidate] = useState({
+  const [passwordValidate, setPasswordValidate] =  useState({
     letter: false,
     eightCharacter: false,
     symbolOrNumber: false,
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordError, setShowPasswordError] = useState(false);
 
+  const [showEmailVerificationPage, setShowEmailVerificationPage] =
+    useState(false);
 
   const emailValidate = (email) => {
     const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     return regex.test(email);
   };
   const checkingEmail = (email) => {
-    console.log('checkingEmail email:', email);
+    console.log("checkingEmail email:", email);
     if (!emailValidate(email)) {
       setEmailError(true);
     } else {
       setEmailError(false);
     }
   };
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-    checkingEmail();
-    if (!emailError && inputEmail) {
-      setShowPasswordPage(true);
-      console.log("submit button clicked");
+  const checkPasswordIsValid = () => {
+    console.log("emailError:", emailError);
+    console.log("passwordValidate:", passwordValidate);
+    if (
+      passwordValidate.eightCharacter &&
+      passwordValidate.letter &&
+      passwordValidate.symbolOrNumber
+    ) {
+      console.log("valid password");
+      setPasswordError(false);
+      return true;
+    }
+    setPasswordError(true);
+    return false;
+  };
+  const createUser = async () => {
+    try {
+      const userCredential = await createFirebaseUser(
+        inputEmail,
+        inputPassword
+      );
+      //show email verification page
+      setShowEmailVerificationPage(true);
+      setShowPasswordPage(false);
+      console.log("userCredential:", userCredential);
+    } catch (error) {
+      console.log("create error:", error);
+      alert(error);
     }
   };
+  const loginHandler = async () => {
+    try {
+      const userCredential = await loginFirebaseUser(inputEmail, inputPassword);
 
-  
+      console.log("login userCredential:", userCredential);
+    } catch (error) {
+      console.log("error:", error);
+    }
+  };
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (showPasswordPage) {
+      console.log("submit button clicked for validate password");
+
+      if (checkPasswordIsValid()) {
+        console.log('submit password is valid')
+        try {
+          setShowPasswordError(false);
+          createUser();
+        } catch (error) {
+          alert(error);
+        }
+      } else {
+        setShowPasswordError(true);
+        console.log("submit button click password invalid");
+      }
+
+    } else {
+      console.log("submit button clicked for validate email");
+
+      checkingEmail();
+      if (!emailError && inputEmail) {
+        setShowPasswordPage(true);
+        // setShowPasswordError(false);
+        console.log("submit button clicked");
+      }
+    }
+  };
 
   useEffect(() => {
     if (showPasswordPage) {
@@ -59,20 +117,7 @@ function Register() {
     }
   }, [showPasswordPage]);
 
-  const checkPasswordIsValid = () => {
-    console.log('emailError:',emailError)
-    console.log('checkPasswordIsValid')
-    if(passwordValidate.eightCharacter &&
-      passwordValidate.letter &&
-      passwordValidate.symbolOrNumber){
-        console.log('valid password')
-        setPasswordError(false);
-
-        return true;
-      }
-      setPasswordError(true);
-      return false;
-  };
+  
 
   const checkingPassword = (password) => {
     console.log('checkingPassword');
@@ -123,16 +168,27 @@ function Register() {
         eightCharacter: false,
       }));
     }
-    checkPasswordIsValid();
+    // return checkPasswordIsValid();
   };
 
-  useEffect(()=>{
-    checkingPassword(inputPassword);
-  },[inputPassword])
+  useEffect(() => {
+    console.log("password useeffect");
+    if (inputPassword) {
+      checkingPassword(inputPassword);
+    }
+  }, [inputPassword]);
 
-const backClickHandler = () =>{
-  checkingEmail();
-}
+  useEffect(() => {
+    inputEmail && checkingEmail(inputEmail);
+  }, [inputEmail]);
+
+  useEffect(()=>{
+    if(checkPasswordIsValid()){
+      setShowPasswordError(false);
+      console.log("checkPasswordIsValid use effect");
+
+    }
+  },[passwordValidate])
 
   return (
     <div className="registration scroll-container">
@@ -147,20 +203,33 @@ const backClickHandler = () =>{
         </button>
       )}
       <Link to="/">
-        <button className="close-button" onClick={backClickHandler}>
+        <button className="close-button">
           <FaTimes size={25} />
         </button>
       </Link>
       {/* <Outlet /> */}
-      <img src={bbc_white_logo} className="logo"/>
+      <img src={bbc_white_logo} className="logo" />
 
       <form className="registrationDetails">
         <h2>
           {showPasswordPage
             ? "Create your account password"
+            : showEmailVerificationPage
+            ? "Your account has been created"
             : "Register for a BBC account"}
         </h2>
-        {!showPasswordPage && (
+        {showEmailVerificationPage && (
+          <div className="email-verification-container">
+            <p>Check your email to verify your account</p>
+            <IoMailOpen size={250} />
+            <Link to="/signin">
+              <button type="button" className="continueBtn">
+                Sign in
+              </button>
+            </Link>
+          </div>
+        )}
+        {!showPasswordPage && !showEmailVerificationPage && (
           <p>You must be 16 or over to register for a BBC account</p>
         )}
         {showPasswordPage && (
@@ -200,31 +269,39 @@ const backClickHandler = () =>{
               inputValue={inputPassword}
               inputPlacholder="Password"
               onChangeInputHandler={(e) => {
-                console.log('password onChangeInputHandler');
+                console.log("password onChangeInputHandler");
                 setInputPassword(e.target.value);
-                console.log('input password:', inputPassword)
+                console.log("input password:", inputPassword);
 
                 // checkingPassword(e.target.value);
               }}
             />
           ) : (
-            <CustomInput
-              isSuccess={inputEmail && !emailError}
-              inputType="email"
-              inputValue={inputEmail}
-              inputPlacholder="Email"
-              onChangeInputHandler={(e) => {
-                setInputEmail(e.target.value);
-                console.log('input email:', inputEmail)
-                // checkingEmail(e.target.value);
-              }}
-            />
+            !showEmailVerificationPage && (
+              <CustomInput
+                isSuccess={inputEmail && !emailError}
+                inputType="email"
+                inputValue={inputEmail}
+                inputPlacholder="Email"
+                onChangeInputHandler={(e) => {
+                  setInputEmail(e.target.value);
+                  console.log("input email:", inputEmail);
+                  // checkingEmail(e.target.value);
+                }}
+              />
+            )
           )}
 
-          {emailError && !showPasswordPage && (
+          {emailError && (
             <span className="email-error">
               Sorry, that email doesn’t look right. Please check it's a proper
               email.
+            </span>
+          )}
+          {showPasswordError && (
+            <span className="email-error">
+              Sorry, that password doesn’t look right.
+              <br /> Please enter a password that meets the requirements above.
             </span>
           )}
         </div>
@@ -246,12 +323,27 @@ const backClickHandler = () =>{
         <br />
         <br />
         <br />
-        <button type="submit" className="continueBtn" onClick={submitHandler}>
-          Continue
-        </button>
-        <p>
-          Already have a BBC account? <a>Sign in now</a>
-        </p>
+        {!showEmailVerificationPage && (
+          <>
+            <button
+              type="submit"
+              className="continueBtn"
+              onClick={submitHandler}
+            >
+              {showPasswordPage ? "Send Verification Email" : "Continue"}
+            </button>
+
+            <p>
+              Already have a BBC account?{" "}
+              <Link to="/signin">
+                <span onClick={loginHandler} className="signin-btn">
+                  Sign in
+                </span>
+              </Link>{" "}
+              now
+            </p>
+          </>
+        )}
       </form>
     </div>
   );

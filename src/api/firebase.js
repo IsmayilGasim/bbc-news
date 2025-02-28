@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 
 import { getFirestore, collection } from 'firebase/firestore';
 
@@ -23,6 +24,5 @@ const collectionURL = `https://firestore.googleapis.com/v1/projects/${firebaseCo
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const collectionn = collection(db,'article-topics')
-console.log('collection:',collectionn)
-export {db,collectionURL };
+ const auth = getAuth(app);
+export {db,collectionURL,auth };

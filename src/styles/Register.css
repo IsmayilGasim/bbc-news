@@ -114,3 +114,18 @@
 .registration ul{
     padding-left: 0 !important;
 }
+
+.email-verification-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+a{
+    cursor: pointer;
+    text-decoration: none!important;
+    color: rgb(72, 72, 251);
+    border: none;
+    padding: 0;
+    margin: 0;
+}

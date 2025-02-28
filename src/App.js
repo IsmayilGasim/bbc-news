@@ -7,21 +7,23 @@ import "./App.css";
 import Register from "../src/pages/Register.js";
 import NoPage from "./pages/NoPage.js";
 import Layout from "./components/Layout.js";
-
+import Test from '../src/api/test.js'
+import SignIn from "./pages/SignIn.js";
 function App() {
+
   return (
-    
+    // <Test></Test>
     <BrowserRouter>
       <Routes>
         <Route path="/">
           <Route index element={<Layout />} />
 
           <Route path="register" element={<Register />} />
+          <Route path="signin" element={<SignIn />} />
           <Route path="*" element={<NoPage />} />
         </Route>
-        {/* <Route path="/register" element={<Register />} />
-        <Route path="*" element={<NoPage />} /> */}
       </Routes>
+
     </BrowserRouter>
   //   <><h1>test</h1>
   //   <CustomInput  isSuccess='true'
