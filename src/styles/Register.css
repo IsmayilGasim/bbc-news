@@ -45,6 +45,7 @@
     transition: all .2sease 0s;
     box-shadow: none;
     border: none;
+    margin-top: 50px;
 }
 
 .continueBtn:hover {
@@ -119,6 +120,9 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+}
+.email-verification-container .signin-link{
+    width: 100%;
 }
 
 a{

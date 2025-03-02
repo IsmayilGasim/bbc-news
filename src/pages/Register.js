@@ -8,6 +8,7 @@ import "../styles/Register.css";
 import bbc_white_logo from "../images/bbc_white_logo.png";
 import CustomInput from "../components/login/CustomInput";
 import { createFirebaseUser, loginFirebaseUser } from "../api/userAuthActions";
+import emailValidate from "../customFunctions/emailValidate";
 
 function Register() {
   const pageLocation = useLocation();
@@ -19,21 +20,17 @@ function Register() {
 
   const [inputPassword, setInputPassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
-  const [passwordValidate, setPasswordValidate] =  useState({
+  const [passwordValidate, setPasswordValidate] = useState({
     letter: false,
     eightCharacter: false,
     symbolOrNumber: false,
   });
-  const [showPassword, setShowPassword] = useState(false);
+  // const [showPassword, setShowPassword] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
 
   const [showEmailVerificationPage, setShowEmailVerificationPage] =
     useState(false);
 
-  const emailValidate = (email) => {
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return regex.test(email);
-  };
   const checkingEmail = (email) => {
     console.log("checkingEmail email:", email);
     if (!emailValidate(email)) {
@@ -72,22 +69,14 @@ function Register() {
       alert(error);
     }
   };
-  const loginHandler = async () => {
-    try {
-      const userCredential = await loginFirebaseUser(inputEmail, inputPassword);
 
-      console.log("login userCredential:", userCredential);
-    } catch (error) {
-      console.log("error:", error);
-    }
-  };
   const submitHandler = (e) => {
     e.preventDefault();
     if (showPasswordPage) {
       console.log("submit button clicked for validate password");
 
       if (checkPasswordIsValid()) {
-        console.log('submit password is valid')
+        console.log("submit password is valid");
         try {
           setShowPasswordError(false);
           createUser();
@@ -98,7 +87,6 @@ function Register() {
         setShowPasswordError(true);
         console.log("submit button click password invalid");
       }
-
     } else {
       console.log("submit button clicked for validate email");
 
@@ -117,11 +105,9 @@ function Register() {
     }
   }, [showPasswordPage]);
 
-  
-
   const checkingPassword = (password) => {
-    console.log('checkingPassword');
-    console.log('inputPassword:',password)
+    console.log("checkingPassword");
+    console.log("inputPassword:", password);
     if (password.match(/[A-Za-z]/)) {
       console.log("uppercase matched");
       setPasswordValidate((prev) => ({
@@ -129,7 +115,7 @@ function Register() {
         letter: true,
       }));
     } else {
-      console.log('upparcase not matched')
+      console.log("upparcase not matched");
       setPasswordValidate((prev) => ({
         ...prev,
         letter: false,
@@ -146,7 +132,7 @@ function Register() {
         symbolOrNumber: true,
       }));
     } else {
-      console.log('number not matched')
+      console.log("number not matched");
 
       setPasswordValidate((prev) => ({
         ...prev,
@@ -161,7 +147,7 @@ function Register() {
         eightCharacter: true,
       }));
     } else {
-      console.log('length not matched')
+      console.log("length not matched");
 
       setPasswordValidate((prev) => ({
         ...prev,
@@ -182,13 +168,12 @@ function Register() {
     inputEmail && checkingEmail(inputEmail);
   }, [inputEmail]);
 
-  useEffect(()=>{
-    if(checkPasswordIsValid()){
+  useEffect(() => {
+    if (checkPasswordIsValid()) {
       setShowPasswordError(false);
       console.log("checkPasswordIsValid use effect");
-
     }
-  },[passwordValidate])
+  }, [passwordValidate]);
 
   return (
     <div className="registration scroll-container">
@@ -222,7 +207,7 @@ function Register() {
           <div className="email-verification-container">
             <p>Check your email to verify your account</p>
             <IoMailOpen size={250} />
-            <Link to="/signin">
+            <Link to="/signin" className="signin-link">
               <button type="button" className="continueBtn">
                 Sign in
               </button>
@@ -265,7 +250,7 @@ function Register() {
           {showPasswordPage ? (
             <CustomInput
               isSuccess={inputPassword && !passwordError}
-              inputType={showPassword ? "text" : "password"}
+              inputType="password"
               inputValue={inputPassword}
               inputPlacholder="Password"
               onChangeInputHandler={(e) => {
@@ -275,6 +260,14 @@ function Register() {
 
                 // checkingPassword(e.target.value);
               }}
+              showError={showPasswordError}
+              errorText={
+                <span>
+                  Sorry, that password doesn’t look right.
+                  <br /> Please enter a password that meets the requirements
+                  above.
+                </span>
+              }
             />
           ) : (
             !showEmailVerificationPage && (
@@ -288,24 +281,28 @@ function Register() {
                   console.log("input email:", inputEmail);
                   // checkingEmail(e.target.value);
                 }}
+                showError={emailError}
+                errorText={
+                  "Sorry, that email doesn’t look right. Please check it's a proper email."
+                }
               />
             )
           )}
 
-          {emailError && (
+          {/* {emailError && (
             <span className="email-error">
               Sorry, that email doesn’t look right. Please check it's a proper
               email.
             </span>
-          )}
-          {showPasswordError && (
+          )} */}
+          {/* {showPasswordError && (
             <span className="email-error">
               Sorry, that password doesn’t look right.
               <br /> Please enter a password that meets the requirements above.
             </span>
-          )}
+          )} */}
         </div>
-        {showPasswordPage && (
+        {/* {showPasswordPage && (
           <div>
             {" "}
             <button
@@ -318,11 +315,8 @@ function Register() {
               {showPassword ? "Hide password" : "Show password"}
             </button>
           </div>
-        )}
-        <br />
-        <br />
-        <br />
-        <br />
+        )} */}
+
         {!showEmailVerificationPage && (
           <>
             <button
@@ -336,9 +330,7 @@ function Register() {
             <p>
               Already have a BBC account?{" "}
               <Link to="/signin">
-                <span onClick={loginHandler} className="signin-btn">
-                  Sign in
-                </span>
+                <span className="signin-btn">Sign in</span>
               </Link>{" "}
               now
             </p>

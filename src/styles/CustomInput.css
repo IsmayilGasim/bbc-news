@@ -81,3 +81,20 @@
     border: 0;
     font-size: larger;
 }
+
+.show-password-button{
+    background: transparent;
+    color: white;
+    border: 0;
+    right: 0;
+    position: absolute;
+font-size: large;
+    padding: 0;
+}
+
+.error-text{
+    position: absolute;
+    left: 0;
+    font-size: 15px;
+    color: red;
+}
