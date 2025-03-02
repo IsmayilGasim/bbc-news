@@ -47,7 +47,10 @@ function Header({ articleTopics }) {
           <Link to="register">
             <RegisterButton />
           </Link>
+          <Link to='signin'>
           <SignIn />
+
+          </Link>
         </Col>
       </Row>
       <Outlet />

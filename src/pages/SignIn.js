@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaTimes } from "react-icons/fa";
 
 import "../styles/Register.css";
@@ -8,6 +8,7 @@ import bbc_white_logo from "../images/bbc_white_logo.png";
 import CustomInput from "../components/login/CustomInput";
 import emailValidate from "../customFunctions/emailValidate";
 import passwordValidate from "../customFunctions/passwordValidate";
+import { loginFirebaseUser } from "../api/userAuthActions";
 
 function SignIn() {
   const [inputEmail, setInputEmail] = useState("");
@@ -19,10 +20,26 @@ function SignIn() {
   const [showEmailError, setShowEmailError] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
 
+  const navigate = useNavigate();
+
+  const login = async () => {
+    try {
+      const userCredential = await loginFirebaseUser(inputEmail, inputPassword);
+      console.log("userCredential:", userCredential);
+      navigate("/");
+    } catch (error) {
+      alert("log in error:", error);
+    }
+  };
+
   const loginClickHandler = (e) => {
     e.preventDefault();
     setShowEmailError(!emailIsSuccess);
     setShowPasswordError(!passwordIsSuccess);
+
+    if (emailIsSuccess && passwordIsSuccess) {
+      login();
+    }
   };
 
   return (
@@ -61,7 +78,10 @@ function SignIn() {
           }}
           showError={showPasswordError}
           errorText={
-            <span>Sorry, that password doesn’t look right.<br /> Please enter a password that meets the requirements above.</span>
+            <span>
+              Sorry, that password doesn’t look right.
+              <br /> Please enter a password that meets the requirements above.
+            </span>
           }
         />
         <button

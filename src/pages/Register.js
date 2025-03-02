@@ -7,7 +7,7 @@ import { FaTimes } from "react-icons/fa";
 import "../styles/Register.css";
 import bbc_white_logo from "../images/bbc_white_logo.png";
 import CustomInput from "../components/login/CustomInput";
-import { createFirebaseUser, loginFirebaseUser } from "../api/userAuthActions";
+import { createFirebaseUser } from "../api/userAuthActions";
 import emailValidate from "../customFunctions/emailValidate";
 
 function Register() {
