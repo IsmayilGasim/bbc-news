@@ -9,8 +9,9 @@ import CustomInput from "../components/login/CustomInput";
 import emailValidate from "../customFunctions/emailValidate";
 import passwordValidate from "../customFunctions/passwordValidate";
 import { loginFirebaseUser } from "../api/userAuthActions";
+import ErrorContainer from "../components/errors/ErrorContainer";
 
-function SignIn() {
+function SignIn({setLoggedUserCredentials}) {
   const [inputEmail, setInputEmail] = useState("");
   const [inputPassword, setInputPassword] = useState("");
 
@@ -20,15 +21,18 @@ function SignIn() {
   const [showEmailError, setShowEmailError] = useState(false);
   const [showPasswordError, setShowPasswordError] = useState(false);
 
+  const [showLoginError, setShowLoginError] = useState(false);
+
   const navigate = useNavigate();
 
   const login = async () => {
     try {
       const userCredential = await loginFirebaseUser(inputEmail, inputPassword);
-      console.log("userCredential:", userCredential);
       navigate("/");
+      setLoggedUserCredentials(userCredential);
     } catch (error) {
       alert("log in error:", error);
+      setShowLoginError(error);
     }
   };
 
@@ -38,7 +42,9 @@ function SignIn() {
     setShowPasswordError(!passwordIsSuccess);
 
     if (emailIsSuccess && passwordIsSuccess) {
-      login();
+     login();
+      //show your account button
+      // save login credentials
     }
   };
 
@@ -50,6 +56,7 @@ function SignIn() {
           <FaTimes size={25} />
         </button>
       </Link>
+      {showLoginError && <ErrorContainer/>}
       <form className="registrationDetails">
         <CustomInput
           isSuccess={emailIsSuccess}

@@ -24,9 +24,7 @@ function Test() {
   //   e.preventDefault();
   //   try {
   //     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  //     console.log("User created:", userCredential.user);
   //   } catch (error) {
-  //     console.error("Error creating user:", error.message);
   //     setError(error.message);
   //   }
   // };

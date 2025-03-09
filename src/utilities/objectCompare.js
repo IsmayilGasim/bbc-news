@@ -1,5 +1,4 @@
 export default function objectCompare(obj1, obj2) {
-  console.log("OBJ1, OBJ2", obj1, obj2);
   if ((obj1 === null || obj2 === null) && obj1 !== obj2) return false;
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
@@ -7,16 +6,13 @@ export default function objectCompare(obj1, obj2) {
   if (keys1.length !== keys2.length) return false;
 
   keys1.every((k) => {
-    console.log("key1:", k);
     return true;
   });
   keys2.every((k) => {
-    console.log("key2:", k);
     return true;
   });
 
 //   return keys1.every((key) => {
-//     console.log("obj1[key], obj2[key]",obj1[key], obj2[key])
 //     if(typeof(obj1[key])===Object && typeof(obj2[key])===Object ){
 //        return objectCompare(obj1[key],obj2[key])
 //     }

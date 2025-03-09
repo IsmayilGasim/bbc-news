@@ -10,10 +10,8 @@ export default function useGetCollectionData(collectionName) {
     axios
       .get(collectionURL.replace("collection_name", collectionName))
       .then((data) => {
-        console.log("data.data", data.data.documents[0].fields);
         setResult(data.data.documents[0].fields);
       });
-    console.log("get result", result);
   }, [collectionName]);
 
   return { data: result };

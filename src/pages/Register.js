@@ -12,7 +12,6 @@ import emailValidate from "../customFunctions/emailValidate";
 
 function Register() {
   const pageLocation = useLocation();
-  console.log("pageLocation:", pageLocation);
 
   const [inputEmail, setInputEmail] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -32,7 +31,6 @@ function Register() {
     useState(false);
 
   const checkingEmail = (email) => {
-    console.log("checkingEmail email:", email);
     if (!emailValidate(email)) {
       setEmailError(true);
     } else {
@@ -40,14 +38,11 @@ function Register() {
     }
   };
   const checkPasswordIsValid = () => {
-    console.log("emailError:", emailError);
-    console.log("passwordValidate:", passwordValidate);
     if (
       passwordValidate.eightCharacter &&
       passwordValidate.letter &&
       passwordValidate.symbolOrNumber
     ) {
-      console.log("valid password");
       setPasswordError(false);
       return true;
     }
@@ -63,9 +58,7 @@ function Register() {
       //show email verification page
       setShowEmailVerificationPage(true);
       setShowPasswordPage(false);
-      console.log("userCredential:", userCredential);
     } catch (error) {
-      console.log("create error:", error);
       alert(error);
     }
   };
@@ -73,10 +66,8 @@ function Register() {
   const submitHandler = (e) => {
     e.preventDefault();
     if (showPasswordPage) {
-      console.log("submit button clicked for validate password");
 
       if (checkPasswordIsValid()) {
-        console.log("submit password is valid");
         try {
           setShowPasswordError(false);
           createUser();
@@ -85,16 +76,13 @@ function Register() {
         }
       } else {
         setShowPasswordError(true);
-        console.log("submit button click password invalid");
       }
     } else {
-      console.log("submit button clicked for validate email");
 
       checkingEmail();
       if (!emailError && inputEmail) {
         setShowPasswordPage(true);
         // setShowPasswordError(false);
-        console.log("submit button clicked");
       }
     }
   };
@@ -106,16 +94,12 @@ function Register() {
   }, [showPasswordPage]);
 
   const checkingPassword = (password) => {
-    console.log("checkingPassword");
-    console.log("inputPassword:", password);
     if (password.match(/[A-Za-z]/)) {
-      console.log("uppercase matched");
       setPasswordValidate((prev) => ({
         ...prev,
         letter: true,
       }));
     } else {
-      console.log("upparcase not matched");
       setPasswordValidate((prev) => ({
         ...prev,
         letter: false,
@@ -126,13 +110,11 @@ function Register() {
       password.match(/[0-9]/) ||
       password.match(/^(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).*$/)
     ) {
-      console.log("number or symbol matched");
       setPasswordValidate((prev) => ({
         ...prev,
         symbolOrNumber: true,
       }));
     } else {
-      console.log("number not matched");
 
       setPasswordValidate((prev) => ({
         ...prev,
@@ -141,13 +123,11 @@ function Register() {
     }
 
     if (password.length >= 8) {
-      console.log("length matched");
       setPasswordValidate((prev) => ({
         ...prev,
         eightCharacter: true,
       }));
     } else {
-      console.log("length not matched");
 
       setPasswordValidate((prev) => ({
         ...prev,
@@ -158,7 +138,6 @@ function Register() {
   };
 
   useEffect(() => {
-    console.log("password useeffect");
     if (inputPassword) {
       checkingPassword(inputPassword);
     }
@@ -171,7 +150,6 @@ function Register() {
   useEffect(() => {
     if (checkPasswordIsValid()) {
       setShowPasswordError(false);
-      console.log("checkPasswordIsValid use effect");
     }
   }, [passwordValidate]);
 
@@ -254,9 +232,7 @@ function Register() {
               inputValue={inputPassword}
               inputPlacholder="Password"
               onChangeInputHandler={(e) => {
-                console.log("password onChangeInputHandler");
                 setInputPassword(e.target.value);
-                console.log("input password:", inputPassword);
 
                 // checkingPassword(e.target.value);
               }}
@@ -278,7 +254,6 @@ function Register() {
                 inputPlacholder="Email"
                 onChangeInputHandler={(e) => {
                   setInputEmail(e.target.value);
-                  console.log("input email:", inputEmail);
                   // checkingEmail(e.target.value);
                 }}
                 showError={emailError}

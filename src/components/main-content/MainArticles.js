@@ -10,7 +10,6 @@ function MainArticles({ news }) {
     news[0].title = "Loading...";
     news[0].category=[]
   }
-  console.log("main articles news:", news);
 
   return (
     <Container fluid>

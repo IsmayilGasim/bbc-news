@@ -9,6 +9,7 @@ function Layout() {
   const { data: articleTopicsList } = useGetCollectionData("article-topics");
   const topics = articleTopicsList ? Object.keys(articleTopicsList) : [];
   const newsData = useGetNewsData();
+  console.log('layout.js')
   return (
     <>
       <Header articleTopics={topics} />

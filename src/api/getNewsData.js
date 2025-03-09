@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 function useGetNewsData(category) {
   const [news, setNews] = useState(null);
-  console.log("category", category);
 
   let url;
   if (category) {
@@ -14,11 +13,9 @@ function useGetNewsData(category) {
   useEffect(() => {
     axios.get(url).then((data) => {
       setNews(data.data.results);
-      console.log("request count");
     });
   }, [category]);
 
-  console.log("news data:", news);
   return news;
 }
 

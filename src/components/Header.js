@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
 import { Image, Container, Row, Col } from "react-bootstrap";
 
 import logo from "../images/logo.svg";
@@ -6,9 +6,16 @@ import RegisterButton from "./login/RegisterButton";
 import SignIn from "./login/SignIn";
 import SideNavBar from "./menu/SideNavBar";
 import { Link, Outlet } from "react-router-dom";
+
+import { UserContext } from "../api/Context";
+import YourAccountButton from "./login/YourAccountButton";
 function Header({ articleTopics }) {
+  console.log('HEADER.JS');
   const [showNavBar, setShowNavBar] = useState(false);
   const searchRef = useRef(null);
+  const user = useContext(UserContext);
+  console.log("userContext:", user);
+
 
   const logoPath = "../";
   return (
@@ -33,7 +40,6 @@ function Header({ articleTopics }) {
                   searchRef.current?.focus();
 
                   setShowNavBar(true);
-                  console.log("searchRef.current", searchRef.current);
                   return true;
                 }}
               ></i>
@@ -44,13 +50,22 @@ function Header({ articleTopics }) {
           <Image src={logo} style={{ width: "80px", height: "40px" }}></Image>
         </Col>
         <Col className="d-flex justify-content-end p-0 m-0">
-          <Link to="register">
-            <RegisterButton />
-          </Link>
-          <Link to='signin'>
-          <SignIn />
-
-          </Link>
+          {user?.user ? (
+            <>
+              <Link >
+                <YourAccountButton />
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="register">
+                <RegisterButton />
+              </Link>
+              <Link to="signin">
+                <SignIn />
+              </Link>
+            </>
+          )}
         </Col>
       </Row>
       <Outlet />
